@@ -1,10 +1,10 @@
-        {% load static %}
-
+{% load static %}
+{% load active_link_tags %}
         <div class="banner code-banner">
 			<div class="container">
 				<div class="header">
 					<div class="logo">
-						<h1><a href="index.html">Myrel Restaurant</a></h1>
+						<h1><a href="{% url 'hotel:index' %}">Green View Restaurant</a></h1>
 					</div>
 					<div class="top-nav">
 						<nav class="navbar navbar-default">
@@ -13,13 +13,13 @@
 							<!-- Collect the nav links, forms, and other content for toggling -->
 							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 								<ul class="nav navbar-nav">
-									<li><a href="index.html">Home</a></li>
-									<li><a href="menu.html">Menu</a></li>
+									<li><a href="{% url 'hotel:index' %}" class="{% active_link 'hotel:index' %}">Home</a></li>
+									<li><a href="{% url 'hotel:menu' %}" class="{% active_link 'hotel:menu' %}">Menu</a></li>
 									{% if user.is_authenticated %}
-									<li><a href="{% url 'hotel:dashboard_admin' %}">Dashboard</a></li>
-									<li><a href="/accounts/logout/">Logout</a></li>
+									<li><a href="{% url 'hotel:dashboard_admin' %}" class="{% active_link 'hotel:dashboard_admin' %}">Dashboard</a></li>
+									<li><a href="{% url 'logout' %}" class="{% active_link 'logout' %}">Logout</a></li>
 									{% else %}
-									<li><a href="/accounts/login/">Login</a></li>
+									<li><a href="{% url 'login' %}" class="{% active_link 'login' %}">Login</a></li>
 									{% endif %}
 									<div class="clearfix"> </div>
 								</ul>

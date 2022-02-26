@@ -17,6 +17,10 @@ from django.utils import timezone
 from reportlab.pdfgen import canvas
 from .models import Customer, Comment, Order, Food, Data, Cart, OrderContent, Staff, DeliveryBoy
 from .forms import SignUpForm
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
+from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 def signup(request):
     if request.method == "POST":
@@ -40,6 +44,7 @@ def signup(request):
         form = SignUpForm()
         
     return render(request, 'registration/signup.html', {'form': form})
+
 
 @login_required
 @staff_member_required
@@ -66,12 +71,14 @@ def dashboard_admin(request):
     }
     return render(request, 'admin_temp/index.html', context)
 
+
 @login_required
 @staff_member_required
 def users_admin(request):
     customers = Customer.objects.filter()
     print(customers)
     return render(request, 'admin_temp/users.html', {'users':customers})
+
 
 @login_required
 @staff_member_required
@@ -81,17 +88,20 @@ def orders_admin(request):
     print(dBoys)
     return render(request, 'admin_temp/orders.html', {'orders':orders, 'dBoys':dBoys})
 
+
 @login_required
 @staff_member_required
 def foods_admin(request):
     foods = Food.objects.filter()
     return render(request, 'admin_temp/foods.html', {'foods':foods})
 
+
 @login_required
 @staff_member_required
 def sales_admin(request):
     sales = Data.objects.filter()
     return render(request, 'admin_temp/sales.html', {'sales':sales})
+
 
 def menu(request):
     cuisine = request.GET.get('cuisine')
@@ -126,6 +136,7 @@ def confirm_order(request, orderID):
     customer.save()
     return redirect('hotel:orders_admin')
 
+
 @login_required
 @staff_member_required
 def confirm_delivery(request, orderID):
@@ -133,41 +144,76 @@ def confirm_delivery(request, orderID):
     order = Order.objects.get(id=orderID)
     order.confirmDelivery()
     order.save()
-    mail_subject = 'Order Delivered successfully'
-    to = str(order.customer.customer.email)
-    to_email.append(to)
-    from_email = 'pradeepgangwar39@gmail.com'
-    message = "Hi "+order.customer.customer.first_name+" Your order was delivered successfully. Please go to your dashboard to see your order history. <br> Your order id is "+orderID+". Share ypour feedback woth us."
-    send_mail(
-        mail_subject,
-        message,
-        from_email,
-        to_email,
-    )
+    # mail_subject = 'Order Delivered successfully'
+    # to = str(order.customer.customer.email)
+    # to_email.append(to)
+    # from_email = ''
+    # message = "Hi "+order.customer.customer.first_name+" Your order was delivered successfully. Please go to your dashboard to see your order history. <br> Your order id is "+orderID+". Share ypour feedback woth us."
+    # send_mail(
+    #     mail_subject,
+    #     message,
+    #     from_email,
+    #     to_email,
+    # )
     return redirect('hotel:orders_admin')
 
-@login_required
-@staff_member_required
-def edit_food(request, foodID):
-    food = Food.objects.filter(id=foodID)[0]
-    if request.method == "POST":
-        if request.POST['base_price'] != "":
-            food.base_price = request.POST['base_price']
-        
-        if request.POST['discount'] != "":
-            food.discount = request.POST['discount'] 
-        
-        food.sale_price = (100 - float(food.discount))*float(food.base_price)/100
 
-        status = request.POST.get('disabled')
-        print(status)
-        if status == 'on':
-            food.status = "Disabled"
-        else:
-            food.status = "Enabled"
-        
-        food.save()
-    return redirect('hotel:foods_admin')
+class StaffAdmin(LoginRequiredMixin, TemplateView):
+    model = Staff
+    template_name = 'admin_temp/staff.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(StaffAdmin, self).get_context_data(**kwargs)
+        context['staffs'] = Staff.objects.all().order_by('id')[:5]
+        return context
+
+
+class AddStaffView(LoginRequiredMixin, CreateView):
+    model = Staff
+    fields = ['staff_id', 'address', 'contact', 'salary', 'role']
+    template_name = 'admin_temp/add_staff.html'
+    success_url = reverse_lazy('hotel:staff_admin')
+
+
+class FoodUpdateView(LoginRequiredMixin, UpdateView):
+    model = Food
+    fields = ['name', 'course', 'status', 'content_description',
+              'base_price', 'sale_price', 'discount', 'image'
+              ]
+    template_name = 'admin_temp/update_food.html'
+    success_url = reverse_lazy('hotel:foods_admin')
+
+
+class FoodDeleteView(LoginRequiredMixin, DeleteView):
+    model = Food
+    template_name = 'admin_temp/food_del.html'
+    success_url = reverse_lazy('hotel:foods_admin')
+
+
+
+
+# @login_required
+# @staff_member_required
+# def edit_food(request, foodID):
+#     food = Food.objects.filter(id=foodID)[0]
+#     if request.method == "POST":
+#         if request.POST['base_price'] != "":
+#             food.base_price = request.POST['base_price']
+#
+#         if request.POST['discount'] != "":
+#             food.discount = request.POST['discount']
+#
+#         food.sale_price = (100 - float(food.discount))*float(food.base_price)/100
+#
+#         status = request.POST.get('disabled')
+#         print(status)
+#         if status == 'on':
+#             food.status = "Disabled"
+#         else:
+#             food.status = "Enabled"
+#
+#         food.save()
+#     return redirect('hotel:foods_admin')
 
 @login_required
 @staff_member_required
@@ -198,6 +244,7 @@ def add_user(request):
 
     return redirect('hotel:users_admin')
 
+
 @login_required
 @staff_member_required
 def add_food(request):
@@ -225,6 +272,13 @@ def add_food(request):
         return render(request, 'admin_temp/foods.html', {'foods': foods, 'success_msg': success_msg})
     return redirect('hotel:foods_admin')
 
+
+class Add_DeliveryBoy(LoginRequiredMixin, TemplateView):
+    model = DeliveryBoy
+    fields = ['order', 'delivery_boy']
+    template_name = 'admin_temp/assign_db.html'
+    success_url = reverse_lazy('hotel:staff_admin')
+
 @login_required
 @staff_member_required
 def add_deliveryBoy(request, orderID):
@@ -236,6 +290,7 @@ def add_deliveryBoy(request, orderID):
     order.delivery_boy = deliveryBoy
     order.save()
     return redirect('hotel:orders_admin')
+
 
 @login_required
 @staff_member_required
@@ -258,6 +313,7 @@ def add_sales(request):
 
     return redirect('hotel:foods_admin')
 
+
 @login_required
 @staff_member_required
 def edit_sales(request, saleID):
@@ -272,10 +328,12 @@ def edit_sales(request, saleID):
         data.save()
     return redirect('hotel:sales_admin')
 
+
 @login_required
 def food_details(request, foodID):
     food = Food.objects.get(id=foodID)
     return render(request, 'user/single.html', {'food':food})
+
 
 @login_required
 def addTocart(request, foodID, userID):
@@ -285,11 +343,13 @@ def addTocart(request, foodID, userID):
     cart.save()
     return redirect('hotel:cart')
 
+
 @login_required
 def delete_item(request, ID):
     item = Cart.objects.get(id=ID)
     item.delete()
     return redirect('hotel:cart')
+
 
 @login_required
 def cart(request):
@@ -299,6 +359,7 @@ def cart(request):
     for item in items:
         total += item.food.sale_price
     return render(request, 'cart.html', {'items': items, 'total':total})
+
 
 @login_required
 def placeOrder(request):
@@ -314,18 +375,19 @@ def placeOrder(request):
         orderContent = OrderContent(food=food, order=order)
         orderContent.save()
         item.delete()
-    mail_subject = 'Order Placed successfully'
-    to = str(customer.customer.email)
-    to_email.append(to)
-    from_email = 'pradeepgangwar39@gmail.com'
-    message = "Hi "+customer.customer.first_name+" Your order was placed successfully. Please go to your dashboard to see your order history. <br> Your order id is "+order.id+""
-    send_mail(
-        mail_subject,
-        message,
-        from_email,
-        to_email,
-    )
+    # mail_subject = 'Order Placed successfully'
+    # to = str(customer.customer.email)
+    # to_email.append(to)
+    # from_email = ''
+    # message = "Hi "+customer.customer.first_name+" Your order was placed successfully. Please go to your dashboard to see your order history. <br> Your order id is "+order.id+""
+    # send_mail(
+    #     mail_subject,
+    #     message,
+    #     from_email,
+    #     to_email,
+    # )
     return redirect('hotel:cart')
+
 
 @login_required
 def my_orders(request):

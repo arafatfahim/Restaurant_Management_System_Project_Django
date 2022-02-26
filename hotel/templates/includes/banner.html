@@ -1,10 +1,10 @@
 {% load static %}
-
+{% load active_link_tags %}
         <div class="banner">
 			<div class="container">
 				<div class="header">
 					<div class="logo">
-						<h1><a href="/">Myrel Restaurant</a></h1>
+						<h1><a href="/">Green View Restaurant</a></h1>
 					</div>
 					<div class="top-nav">
 						<nav class="navbar navbar-default">
@@ -13,13 +13,14 @@
 							<!-- Collect the nav links, forms, and other content for toggling -->
 							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 								<ul class="nav navbar-nav">
-									<li><a class="active" href="{% url 'hotel:index' %}">Home</a></li>
-									<li><a href="{% url 'hotel:menu' %}">Menu</a></li>
+									<li><a href="{% url 'hotel:index' %}" class="{% active_link 'hotel:index' %}">Home</a></li>
+									<li><a href="{% url 'hotel:menu' %}" class="{% active_link 'hotel:menu' %}">Menu</a></li>
 									{% if user.is_authenticated %}
-									<li><a href="{% url 'hotel:dashboard_admin' %}">Dashboard</a></li>
-									<li><a href="/accounts/logout/">Logout</a></li>
+									<li><a href="{% url 'hotel:dashboard_admin' %}" class="{% active_link 'hotel:dashboard_admin' %}">Dashboard</a></li>
+									<li><a href="{% url 'logout' %}" class="{% active_link 'logout' %}">Logout</a></li>
 									{% else %}
-									<li><a href="/accounts/login/">Login</a></li>
+									<li><a href="{% url 'login' %}" class="{% active_link 'login' %}">Login</a></li>
+									<li><a href="{% url 'signup' %}" class="{% active_link 'signup' %}">Register</a></li>
 									{% endif %}
 									<div class="clearfix"> </div>
 								</ul>
@@ -32,39 +33,39 @@
 					<h2>Tasty food served at your doorstep</h2>
 					<p>Experience the fastest delivery. Order now and get your food at your doorstep in 30 minutes!</p>
 				</div>
-				<div class="banner-grads">
-					<div class="col-md-3 banner-grad">
-						<a href="http://localhost:8000/menu?cuisine=south">
-							<div class="banner-grad-img">
-								<img src="{% static 'images/iloilo.jpg' %}" alt="" />
-								<h4>Iloilo Food</h4>
-							</div>
-						</a>
-					</div>
-					<div class="col-md-3 banner-grad">
-						<a href="http://localhost:8000/menu?cuisine=Gujarati">
-							<div class="banner-grad-img">
-								<img src="{% static 'images/bacolod.jpg' %}" alt="" />
-								<h4>Negros Food</h4>
-							</div>
-						</a>
-					</div>
-					<div class="col-md-3 banner-grad">
-						<a href="http://localhost:8000/menu?cuisine=fast">
-							<div class="banner-grad-img">
-								<img src="{% static 'images/cebu.jpg' %}" alt="" />
-								<h4>Cebu Food</h4>
-							</div>
-						</a>
-					</div>
-					<div class="col-md-3 banner-grad">
-						<a href="http://localhost:8000/menu?cuisine=Punjabi">
-							<div class="banner-grad-img">
-								<img src="{% static 'images/manila.jpg' %}" alt="" />
-								<h4>Manila Food</h4>
-							</div>
-						</a>
-					</div>
+{#				<div class="banner-grads">#}
+{#					<div class="col-md-3 banner-grad">#}
+{#						<a href="http://localhost:8000/menu?cuisine=south">#}
+{#							<div class="banner-grad-img">#}
+{#								<img src="{% static 'images/iloilo.jpg' %}" alt="" />#}
+{#								<h4>Iloilo Food</h4>#}
+{#							</div>#}
+{#						</a>#}
+{#					</div>#}
+{#					<div class="col-md-3 banner-grad">#}
+{#						<a href="http://localhost:8000/menu?cuisine=Gujarati">#}
+{#	   						<div class="banner-grad-img">#}
+{#								<img src="{% static 'images/bacolod.jpg' %}" alt="" />#}
+{#								<h4>Negros Food</h4>#}
+{#							</div>#}
+{#						</a>#}
+{#					</div>#}
+{#					<div class="col-md-3 banner-grad">#}
+{#						<a href="http://localhost:8000/menu?cuisine=fast">#}
+{#							<div class="banner-grad-img">#}
+{#								<img src="{% static 'images/cebu.jpg' %}" alt="" />#}
+{#								<h4>Cebu Food</h4>#}
+{#							</div>#}
+{#						</a>#}
+{#					</div>#}
+{#					<div class="col-md-3 banner-grad">#}
+{#						<a href="http://localhost:8000/menu?cuisine=Punjabi">#}
+{#							<div class="banner-grad-img">#}
+{#								<img src="{% static 'images/manila.jpg' %}" alt="" />#}
+{#								<h4>Manila Food</h4>#}
+{#							</div>#}
+{#						</a>#}
+{#					</div>#}
 					<div class="clearfix"> </div>
 				</div>
 			</div>

@@ -1,11 +1,8 @@
 {% load static %} 
 {% include "includes/base.html" %} 
-{% include "includes/navbarheader.html" %} 
-{% include "includes/navtop.html"%}
-{% include "includes/sidemenu.html" %}
 
-</nav>
 
+{% block main %}
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -120,7 +117,8 @@
 </div>
 <!-- /#page-wrapper -->
 
-</div>
+{% endblock %}
+{% block js %}
 <!-- /#wrapper -->
 
 <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
@@ -143,6 +141,4 @@
 <script src="{% static 'vendor/metisMenu/metisMenu.min.js'%}"></script>
 <script src="{% static 'dist/js/sb-admin-2.js'%}"></script>
 
-</body>
-
-</html>
+{% endblock %}

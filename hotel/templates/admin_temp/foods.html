@@ -1,12 +1,6 @@
-{% load static %} 
-{% load static %} 
+{% load static %}
 {% include "includes/base.html" %} 
-{% include "includes/navbarheader.html" %} 
-{% include "includes/navtop.html"%}
-{% include "includes/sidemenu.html" %}
-
-</nav>
-
+{% block main %}
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -29,17 +23,17 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="name">Name:</label>
-                                    <input type="text" class="form-control" id="name" name="name">
+                                    <input type="text" required class="form-control" id="name" name="name">
                                 </div>
                                 <div class="form-group">
                                     <label for="course">Course:</label>
-                                    <select class="dropdown" id="course" name="course">
+                                    <select required class="dropdown" id="course" name="course">
                                         <option selected="selected">------</option>
-                                        <option value="Indian">Negros Best Food</option>
-                                        <option value="Gujarati">Manila Best Food</option>
-                                        <option value="South">Cebu Best Food</option>
-                                        <option value="Punjabi">Iloilo Best Food</option>
-                                        <option value="Fast">Aklan Food</option>
+                                        <option value="Bengali">Bengali</option>
+                                        <option value="Thai">Thai</option>
+                                        <option value="Chinese">Chinese</option>
+                                        <option value="Indian">Indian</option>
+                                        <option value="Italian">Italian</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -52,11 +46,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="content">Content Description:</label>
-                                    <input type="text" class="form-control" id="content" name="content">
+                                    <input type="text" required class="form-control" id="content" name="content">
                                 </div>
                                 <div class="form-group">
                                     <label for="base_price">Base Price:</label>
-                                    <input type="number" class="form-control" id="base_price" name="base_price" value=0>
+                                    <input type="number" required class="form-control" id="base_price" name="base_price" value=0>
                                 </div>
                                 <div class="form-group">
                                     <label for="discount">Discount(%):</label>
@@ -64,7 +58,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="image">Image:</label>
-                                    <input type="file" class="form-control" id="image" name="image">
+                                    <input type="file" required class="form-control" id="image" name="image">
                                 </div>
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </form>
@@ -95,7 +89,7 @@
                                 <th>Discount(%)</th>
                                 <th>Sale Price</th>
                                 <th>Status</th>
-                                <th>Expense/Sales</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -115,44 +109,47 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </button>
-                                    <div id="myModal" class="modal fade" role="dialog">
-                                        <div class="modal-dialog">
+{#                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">#}
+{#                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>#}
+{#                                    </button>#}
 
-                                            <!-- Modal content-->
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title">Edit Food Details</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form method="POST" action="{% url 'hotel:edit_food' food.id %}">
-                                                        {% csrf_token %}
-                                                        <div class="form-group">
-                                                            <label for="base_price">Base Price:</label>
-                                                            <input type="number" class="form-control" id="base_price" name="base_price">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="discount">Discount(%):</label>
-                                                            <input type="number" class="form-control" id="discount" name="discount">
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <label>
-                                                                <input type="checkbox" name="disabled" {% ifequal food.status 'Disabled' %}checked{% endifequal %}>Not Available
-                                                            </label>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-default">Submit</button>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                    <a href="{% url 'hotel:edit_food' food.id %}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                    <a href="{% url 'hotel:food_delete' food.id %}" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span></a>
+{#                                    <div id="myModal" class="modal fade" role="dialog">#}
+{#                                        <div class="modal-dialog">#}
+{##}
+{#                                            <!-- Modal content-->#}
+{#                                            <div class="modal-content">#}
+{#                                                <div class="modal-header">#}
+{#                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>#}
+{#                                                    <h4 class="modal-title">Edit Food Details</h4>#}
+{#                                                </div>#}
+{#                                                <div class="modal-body">#}
+{#                                                    <form method="POST" action="{% url 'hotel:edit_food' food.id %}">#}
+{#                                                        {% csrf_token %}#}
+{#                                                        <div class="form-group">#}
+{#                                                            <label for="base_price">Base Price:</label>#}
+{#                                                            <input type="number" class="form-control" id="base_price" name="base_price">#}
+{#                                                        </div>#}
+{#                                                        <div class="form-group">#}
+{#                                                            <label for="discount">Discount(%):</label>#}
+{#                                                            <input type="number" class="form-control" id="discount" name="discount">#}
+{#                                                        </div>#}
+{#                                                        <div class="checkbox">#}
+{#                                                            <label>#}
+{#                                                                <input type="checkbox" name="disabled" {% ifequal food.status 'Disabled' %}checked{% endifequal %}>Not Available#}
+{#                                                            </label>#}
+{#                                                        </div>#}
+{#                                                        <button type="submit" class="btn btn-default">Submit</button>#}
+{#                                                    </form>#}
+{#                                                </div>#}
+{#                                                <div class="modal-footer">#}
+{#                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -168,10 +165,10 @@
     <!-- /.row -->
     <!-- /.row -->
 </div>
-<!-- /#page-wrapper -->
+{% endblock %}
 
-</div>
-<!-- /#wrapper -->
+ {% block js %}
+
 
 <script src="{% static 'vendor/jquery/jquery.min.js'%}"></script>
 
@@ -193,6 +190,4 @@
 <script src="{% static 'vendor/metisMenu/metisMenu.min.js'%}"></script>
 <script src="{% static 'dist/js/sb-admin-2.js'%}"></script>
 
-</body>
-
-</html>
+{% endblock %}
