@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from . import views
-
+from django.urls import path
+from .views import FoodDeleteView, FoodUpdateView
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^cart/$', views.cart, name='cart'),
@@ -16,7 +17,7 @@ urlpatterns = [
     url(r'^dashboard/admin/users/add_user/$', views.add_user, name='add_user'),
     url(r'^dashboard/admin/foods/add_food/$', views.add_food, name='add_food'),
     url(r'^dashboard/admin/sales/add_sales/$', views.add_sales, name='add_sales'),
-    url(r'^dashboard/admin/foods/editFood/(?P<foodID>\d+)/$', views.edit_food, name='edit_food'),
+    # url(r'^dashboard/admin/foods/editFood/(?P<foodID>\d+)/$', views.edit_food, name='edit_food'),
     url(r'^dashboard/admin/foods/foodDetails/(?P<foodID>\d+)/$', views.food_details, name='food_details'),
     url(r'^dashboard/admin/sales/editSale/(?P<saleID>\d+)/$', views.edit_sales, name='edit_sales'),
     
@@ -29,4 +30,7 @@ urlpatterns = [
     url(r'^addTocart/(?P<foodID>\d+)/(?P<userID>\d+)/$', views.addTocart, name='addTocart'),
 
     url(r'^dashboard/delivery_boy/$', views.delivery_boy, name='delivery_boy'),
+    path('dashboard/admin/foods/<int:pk>/update', FoodUpdateView.as_view(), name="edit_food"),
+    path('dashboard/admin/foods/<int:pk>/delete', FoodDeleteView.as_view(), name="food_delete"),
+
 ]

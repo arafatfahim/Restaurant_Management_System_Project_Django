@@ -17,6 +17,10 @@ from django.utils import timezone
 from reportlab.pdfgen import canvas
 from .models import Customer, Comment, Order, Food, Data, Cart, OrderContent, Staff, DeliveryBoy
 from .forms import SignUpForm
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 
 def signup(request):
     if request.method == "POST":
@@ -146,28 +150,51 @@ def confirm_delivery(request, orderID):
     )
     return redirect('hotel:orders_admin')
 
-@login_required
-@staff_member_required
-def edit_food(request, foodID):
-    food = Food.objects.filter(id=foodID)[0]
-    if request.method == "POST":
-        if request.POST['base_price'] != "":
-            food.base_price = request.POST['base_price']
-        
-        if request.POST['discount'] != "":
-            food.discount = request.POST['discount'] 
-        
-        food.sale_price = (100 - float(food.discount))*float(food.base_price)/100
 
-        status = request.POST.get('disabled')
-        print(status)
-        if status == 'on':
-            food.status = "Disabled"
-        else:
-            food.status = "Enabled"
-        
-        food.save()
-    return redirect('hotel:foods_admin')
+class FoodUpdateView(LoginRequiredMixin, UpdateView):
+    model = Food
+    fields = ['name', 'course', 'status', 'content_description',
+              'base_price', 'sale_price', 'discount', 'image'
+              ]
+    template_name = 'admin_temp/update_food.html'
+    success_url = reverse_lazy('hotel:foods_admin')
+
+
+class FoodDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Food
+    template_name = 'admin_temp/food_del.html'
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+
+
+# @login_required
+# @staff_member_required
+# def edit_food(request, foodID):
+#     food = Food.objects.filter(id=foodID)[0]
+#     if request.method == "POST":
+#         if request.POST['base_price'] != "":
+#             food.base_price = request.POST['base_price']
+#
+#         if request.POST['discount'] != "":
+#             food.discount = request.POST['discount']
+#
+#         food.sale_price = (100 - float(food.discount))*float(food.base_price)/100
+#
+#         status = request.POST.get('disabled')
+#         print(status)
+#         if status == 'on':
+#             food.status = "Disabled"
+#         else:
+#             food.status = "Enabled"
+#
+#         food.save()
+#     return redirect('hotel:foods_admin')
 
 @login_required
 @staff_member_required

@@ -26,10 +26,14 @@ from hotel import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    url(r'^accounts/logout/$', auth_views.LogoutView.as_view(), name='logout', kwargs={'next_page':'/'}),
+    url(r'^accounts/logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^accounts/signup/$', views.signup, name='signup'),
     url(r'', include(('hotel.urls', 'hotel'), namespace='hotel')),
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]

@@ -11,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Myrel Restaurant | Login</title>
+    <title>Green View Restaurant | Login</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -29,8 +29,9 @@
 
 <body>
 
-    {% include "includes/navbarheader.html" %}
-
+<div class="logo">
+    <h1><a href="{% url 'hotel:index' %}">Green View Restaurant</a></h1>
+</div>
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
@@ -53,7 +54,7 @@
                             </fieldset>
                             <br>
                             <div class="form-group text-center">
-                                <h5> Don't have a account! <a href="/accounts/signup">Signup</a> instead</h5>
+                                <h5> Don't have a account! <a href="{% url 'signup' %}">Signup</a> instead</h5>
                             </div>
                         </form>
                     </div>
