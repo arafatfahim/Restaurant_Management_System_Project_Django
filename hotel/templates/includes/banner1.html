@@ -13,13 +13,17 @@
 							<!-- Collect the nav links, forms, and other content for toggling -->
 							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 								<ul class="nav navbar-nav">
-									<li><a href="{% url 'hotel:index' %}" class="{% active_link 'hotel:index' %}">Home</a></li>
-									<li><a href="{% url 'hotel:menu' %}" class="{% active_link 'hotel:menu' %}">Menu</a></li>
-									{% if user.is_authenticated %}
-									<li><a href="{% url 'hotel:dashboard_admin' %}" class="{% active_link 'hotel:dashboard_admin' %}">Dashboard</a></li>
-									<li><a href="{% url 'logout' %}" class="{% active_link 'logout' %}">Logout</a></li>
+									<li><a href="{% url 'hotel:index' %}">Home</a></li>
+									<li><a href="{% url 'hotel:menu' %}" >Menu</a></li>
+									{% if request.user.is_superuser %}
+									<li><a href="{% url 'hotel:dashboard_admin' %}" >Dashboard</a></li>
+									<li><a href="{% url 'logout' %}" >Logout</a></li>
+									{% elif user.is_authenticated %}
+									<li><a href="{% url 'hotel:my_orders' %}" >My Orders</a></li>
+									<li><a href="{% url 'logout' %}" >Logout</a></li>
 									{% else %}
-									<li><a href="{% url 'login' %}" class="{% active_link 'login' %}">Login</a></li>
+									<li><a href="{% url 'login' %}">Login</a></li>
+									<li><a href="{% url 'signup' %}" >Register</a></li>
 									{% endif %}
 									<div class="clearfix"> </div>
 								</ul>
