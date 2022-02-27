@@ -17,32 +17,55 @@ class Customer(models.Model):
     contact = models.CharField(max_length=10)
     orders = models.IntegerField(default=0)
     total_sale = models.IntegerField(default=0)
+    status = models.CharField(max_length=50 , choices=STATUS)
 
     def __str__(self):
         return self.customer.first_name + " " + self.customer.last_name
 
 
+# class Staff(models.Model):
+#     admin = 'Admin'
+#     deliveryboy = 'Delivery Boy'
+#     chef = 'Chef'
+
+#     ROLES = (
+#         (admin, admin),
+#         (chef, chef),
+#         (deliveryboy, deliveryboy),
+#     )
+    
+#     staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     address = models.TextField()
+#     contact = models.CharField(max_length=10)
+#     email = User.email
+#     salary = models.IntegerField()
+#     role = models.CharField(max_length=30, choices=ROLES)
+    
+#     def __str__(self):
+#         return self.staff_id.first_name + " " + self.staff_id.last_name
+
+
 class Staff(models.Model):
-    admin = 'Admin'
+
+    weiter = 'weiter'
     deliveryboy = 'Delivery Boy'
     chef = 'Chef'
 
     ROLES = (
-        (admin, admin),
+        (weiter, weiter),
         (chef, chef),
         (deliveryboy, deliveryboy),
     )
     
-    staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    staff_name = models.CharField(max_length=255)
     address = models.TextField()
     contact = models.CharField(max_length=10)
-    email = User.email
+    email = models.EmailField(max_length=255)
     salary = models.IntegerField()
     role = models.CharField(max_length=30, choices=ROLES)
     
     def __str__(self):
-        return self.staff_id.first_name + " " + self.staff_id.last_name
-
+        return self.staff_name
 
 class Order(models.Model):
     pending = 'Pending'

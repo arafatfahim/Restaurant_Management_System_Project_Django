@@ -172,7 +172,7 @@ class StaffAdmin(LoginRequiredMixin, TemplateView):
 # @staff_member_required
 class AddStaffView(LoginRequiredMixin,  CreateView):
     model = Staff
-    fields = ['staff_id', 'address', 'contact', 'salary', 'role']
+    fields = ['staff_name', 'address', 'contact', 'salary', 'role']
     template_name = 'admin_temp/add_staff.html'
     success_url = reverse_lazy('hotel:staff_admin')
 
@@ -290,8 +290,8 @@ def add_deliveryBoy(request, orderID):
     order = Order.objects.get(id=orderID)
     dName = request.POST['deliveryBoy']
     print(dName)
-    user = User.objects.get(first_name=dName)
-    deliveryBoy = Staff.objects.get(staff_id=user)
+    # user = User.objects.get(first_name=dName)
+    deliveryBoy = Staff.objects.get(staff_name=dName)
     order.delivery_boy = deliveryBoy
     order.save()
     return redirect('hotel:orders_admin')
@@ -391,7 +391,7 @@ def placeOrder(request):
     #     from_email,
     #     to_email,
     # )
-    return redirect('hotel:cart')
+    return redirect('hotel:my_orders')
 
 
 @login_required
@@ -407,7 +407,7 @@ def delivery_boy(request):
     try:
         customer = Customer.objects.get(customer=user)
     except Customer.DoesNotExist:
-        staff = Staff.objects.get(staff_id=user)
+        staff = Staff.objects.get(staff_name=user)
         if staff is None or staff.role != 'Delivery Boy':
             redirect('hotel:index')
         else:

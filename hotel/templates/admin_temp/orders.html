@@ -84,7 +84,7 @@
                                                                         <select class="dropdown" id="deliveryBoy" name="deliveryBoy">
                                                                             <option selected="selected">------</option>
                                                                             {% for d in dBoys %}
-                                                                                <option value="{{d.staff_id.first_name}}">{{d.staff_id.first_name}} {{d.staff_id.last_name}}</option>
+                                                                                <option value="{{d.staff_name}}">{{d.staff_name}}</option>
                                                                             {% endfor %}
                                                                         </select>
                                                                     </div>
@@ -96,7 +96,7 @@
                                                 </div>
                                             </a>
                                             {% else %}
-                                            <span class="label label-success">{{order.delivery_boy.staff_id.first_name}} {{order.delivery_boy.staff_id.last_name}}</span>
+                                            <span class="label label-success">{{order.delivery_boy.staff_name}}</span>
 
                                             {% endifequal %}
                                         </td>

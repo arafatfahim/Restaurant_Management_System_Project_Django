@@ -3,6 +3,7 @@ from .models import Customer, Staff, Order, Food, Comment, Data, OrderContent, C
 
 admin.site.register(Customer)
 admin.site.register(Staff)
+# admin.site.register(StaffList)
 admin.site.register(Order)
 admin.site.register(Food)
 admin.site.register(Comment)
