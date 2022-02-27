@@ -158,6 +158,7 @@ def confirm_delivery(request, orderID):
     return redirect('hotel:orders_admin')
 
 
+# @staff_member_required
 class StaffAdmin(LoginRequiredMixin, TemplateView):
     model = Staff
     template_name = 'admin_temp/staff.html'
@@ -168,13 +169,15 @@ class StaffAdmin(LoginRequiredMixin, TemplateView):
         return context
 
 
-class AddStaffView(LoginRequiredMixin, CreateView):
+# @staff_member_required
+class AddStaffView(LoginRequiredMixin,  CreateView):
     model = Staff
     fields = ['staff_id', 'address', 'contact', 'salary', 'role']
     template_name = 'admin_temp/add_staff.html'
     success_url = reverse_lazy('hotel:staff_admin')
 
 
+# @staff_member_required
 class FoodUpdateView(LoginRequiredMixin, UpdateView):
     model = Food
     fields = ['name', 'course', 'status', 'content_description',
@@ -184,11 +187,11 @@ class FoodUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('hotel:foods_admin')
 
 
+# @staff_member_required
 class FoodDeleteView(LoginRequiredMixin, DeleteView):
     model = Food
     template_name = 'admin_temp/food_del.html'
     success_url = reverse_lazy('hotel:foods_admin')
-
 
 
 
@@ -214,6 +217,7 @@ class FoodDeleteView(LoginRequiredMixin, DeleteView):
 #
 #         food.save()
 #     return redirect('hotel:foods_admin')
+
 
 @login_required
 @staff_member_required
@@ -274,10 +278,11 @@ def add_food(request):
 
 
 class Add_DeliveryBoy(LoginRequiredMixin, TemplateView):
-    model = DeliveryBoy
-    fields = ['order', 'delivery_boy']
+    model = Order, Staff
+    fields = ['order.id', 'staff_id']
     template_name = 'admin_temp/assign_db.html'
     success_url = reverse_lazy('hotel:staff_admin')
+
 
 @login_required
 @staff_member_required

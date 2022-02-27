@@ -1,29 +1,29 @@
 {% load static %}
-{% include "includes/base.html" %}
-{% include "includes/navbarheader.html" %}
-{% include "includes/navtop.html" %}
+{% include "includes/userbase.html" %}
+{#{% include "includes/navbarheader.html" %}#}
+{#{% include "includes/navtop.html" %}#}
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
-            <li class="sidebar-search">
-                <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-                <!-- /input-group -->
-            </li>
-            <li>
-                <a href="/dashboard">
-                    <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-            </li>
-            <li>
-                <a href="{% url 'hotel:my_orders' %}">
-                    <i class="fa fa-truck fa-fw"></i> Orders</a>
-            </li>
+{#            <li class="sidebar-search">#}
+{#                <div class="input-group custom-search-form">#}
+{#                    <input type="text" class="form-control" placeholder="Search...">#}
+{#                    <span class="input-group-btn">#}
+{#                        <button class="btn btn-default" type="button">#}
+{#                            <i class="fa fa-search"></i>#}
+{#                        </button>#}
+{#                    </span>#}
+{#                </div>#}
+{#                <!-- /input-group -->#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="/dashboard">#}
+{#                    <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="{% url 'hotel:my_orders' %}">#}
+{#                    <i class="fa fa-truck fa-fw"></i> Orders</a>#}
+{#            </li>#}
         </ul>
     </div>
     <!-- /.sidebar-collapse -->
@@ -57,7 +57,7 @@
                                         <th>Amount</th>
                                         <th>Payment Method</th>
                                         <th>Payment Status</th>
-                                        <th>Delivery Time</th>
+                                        <th>Delivery Person</th>
                                         <th>Delivery Status</th>
                                     </tr>
                                 </thead>
@@ -72,16 +72,22 @@
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                             {% endif %}
                                         </td>
-                                        <td>{{order.order_timestamp}}</td>
-                                        <td>{{order.total_amount}}</td>
-                                        <td>{{order.payment_method}}</td>
+                                        <td><span class="label label-info">{{order.order_timestamp}}</span></td>
+                                        <td><span class="label label-default">{{order.total_amount}} bdt</span></td>
+
+                                        <td><span class="label label-primary">{{order.payment_method}}</span></td>
                                         <td>{% if order.payment_status == 'Completed' %}
                                             <span class="label label-success">Paid</span>
                                             {% else %}
                                             <span class="label label-danger">Pending</span>
                                             {% endif %}
                                         </td>
-                                        <td>{{order.delivery_timestamp}}</td>
+                                        <td>{% if  order.delivery_boy == None %}
+                                            <span class="label label-danger">Pending</span>
+                                            {% else %}
+                                            <span class="label label-success">{{ order.delivery_boy }}</span>
+                                            {% endif %}
+                                        </td>
                                         <td>{% if order.delivery_status == 'Completed' %}
                                             <span class="label label-success">Delivered</span>
                                             {% else %}

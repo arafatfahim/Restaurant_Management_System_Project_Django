@@ -49,18 +49,18 @@ class Order(models.Model):
     completed = 'Completed'
 
     STATUS = (
-        (pending,pending),
-        (completed,completed),
+        (pending, pending),
+        (completed, completed),
     )
 
     cod = 'Cash On Delivery'
     card = 'Card Payment'
-    upi = 'UPI Payment'
+    bkash = 'Bkash Payment'
 
     PAYMENT = (
-        (cod,cod),
-        (card,card),
-        (upi,upi),
+        (cod, cod),
+        (card, card),
+        (bkash, bkash),
     )
 
     pickup = 'PickUp'
@@ -95,6 +95,7 @@ class Order(models.Model):
     def __str__(self):
         return self.customer.__str__()
 
+
 class Food(models.Model):
     bengali = 'Bengali'
     thai = 'Thai'
@@ -103,11 +104,11 @@ class Food(models.Model):
     italian = 'Italian'
     
     COURSE = (
-        (bengali,bengali),
-        (thai,thai),
-        (chinese,chinese),
-        (indian,indian),
-        (italian,italian),
+        (bengali, bengali),
+        (thai, thai),
+        (chinese, chinese),
+        (indian, indian),
+        (italian, italian),
     )
 
     disabled = 'Disabled'
@@ -139,21 +140,25 @@ class Comment(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     content = models.CharField(max_length=250)
 
+
 class Data(models.Model):
     date = models.DateField()
     sales = models.IntegerField()
     expenses = models.IntegerField()
+
 
 class OrderContent(models.Model):
     quantity = models.IntegerField(default=1)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
+
 class Cart(models.Model):
     quantity = models.IntegerField(default=1)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
 class DeliveryBoy(models.Model):
-    order= models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE)
