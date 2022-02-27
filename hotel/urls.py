@@ -1,11 +1,12 @@
 from django.conf.urls import url
 from . import views
 from django.urls import path
-from .views import FoodDeleteView, FoodUpdateView, StaffAdmin, AddStaffView, Add_DeliveryBoy
+from .views import FoodDeleteView, FoodUpdateView, StaffAdmin, AddStaffView, Add_DeliveryBoy, Thanks
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^cart/$', views.cart, name='cart'),
     url(r'^menu/$', views.menu, name='menu'),
+    url(r'^thanks/$', Thanks.as_view(), name='thanks'),
     url(r'^myorders/$', views.my_orders, name='my_orders'),
     
     url(r'^dashboard/admin/users/$', views.users_admin, name='users_admin'),

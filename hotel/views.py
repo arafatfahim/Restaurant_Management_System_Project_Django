@@ -283,6 +283,10 @@ class Add_DeliveryBoy(LoginRequiredMixin, TemplateView):
     template_name = 'admin_temp/assign_db.html'
     success_url = reverse_lazy('hotel:staff_admin')
 
+class Thanks(LoginRequiredMixin, TemplateView):
+    template_name = 'thankyou.html'
+
+
 
 @login_required
 @staff_member_required
@@ -391,7 +395,7 @@ def placeOrder(request):
     #     from_email,
     #     to_email,
     # )
-    return redirect('hotel:my_orders')
+    return redirect('hotel:thanks')
 
 
 @login_required
