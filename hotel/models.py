@@ -146,6 +146,7 @@ class Food(models.Model):
     course = models.CharField(max_length = 50, choices = COURSE)
     status = models.CharField(max_length=50, choices=STATUS)
     content_description = models.TextField()
+    ingradients = models.TextField()
     base_price = models.FloatField()
     sale_price = models.FloatField(default=base_price)
     discount = models.DecimalField(default=0, decimal_places=2, max_digits=5)

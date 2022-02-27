@@ -165,7 +165,7 @@ class StaffAdmin(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffAdmin, self).get_context_data(**kwargs)
-        context['staffs'] = Staff.objects.all().order_by('id')[:5]
+        context['staffs'] = Staff.objects.all() #.order_by('id')[:5]
         return context
 
 
@@ -180,7 +180,7 @@ class AddStaffView(LoginRequiredMixin,  CreateView):
 # @staff_member_required
 class FoodUpdateView(LoginRequiredMixin, UpdateView):
     model = Food
-    fields = ['name', 'course', 'status', 'content_description',
+    fields = ['name', 'course', 'status', 'content_description', 'ingradients',
               'base_price', 'sale_price', 'discount', 'image'
               ]
     template_name = 'admin_temp/update_food.html'
@@ -337,7 +337,7 @@ def edit_sales(request, saleID):
 @login_required
 def food_details(request, foodID):
     food = Food.objects.get(id=foodID)
-    return render(request, 'user/single.html', {'food':food})
+    return render(request, 'user/single2.html', {'food':food})
 
 
 @login_required
