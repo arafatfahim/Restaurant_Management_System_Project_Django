@@ -83,10 +83,11 @@ def users_admin(request):
 @login_required
 @staff_member_required
 def orders_admin(request):
-    orders = Order.objects.filter()
+    orders = Order.objects.filter().order_by('-id')
     dBoys = Staff.objects.filter(role='Delivery Boy')
     print(dBoys)
-    return render(request, 'admin_temp/orders.html', {'orders':orders, 'dBoys':dBoys})
+    print(orders)
+    return render(request, 'admin_temp/orders.html', {'orders': orders, 'dBoys': dBoys})
 
 
 @login_required
@@ -402,8 +403,10 @@ def placeOrder(request):
 def my_orders(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(customer=user)
-    orders = Order.objects.filter(customer=customer)
+    orders = Order.objects.filter(customer=customer).order_by('-id')
+    print(orders)
     return render(request, 'orders.html', {'orders': orders})
+
 
 @login_required
 def delivery_boy(request):

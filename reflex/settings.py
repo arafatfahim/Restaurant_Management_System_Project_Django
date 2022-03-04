@@ -36,7 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.humanize',
     'django.contrib.staticfiles',
+    # 'channels',
+    # 'django_private_chat2.apps.DjangoPrivateChat2Config',
+    # 'django_private_chat',
     'active_link',
     "debug_toolbar",
     'crispy_forms',
@@ -45,7 +49,17 @@ INSTALLED_APPS = [
     'mathfilters',
 
 
+
 ]
+# CHANNEL_LAYERS = {
+#       “default”: {
+#       “BACKEND”: “asgi_redis.RedisChannelLayer”,
+#       “CONFIG”: {
+#          “hosts”: [(redis_host, 6379)],
+#     },
+#     “ROUTING”: “routing.application”,
+#    },
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,8 +92,14 @@ TEMPLATES = [
     },
 ]
 
+
+# ASGI_APPLICATION = 'reflex.asgi.application'
 WSGI_APPLICATION = 'reflex.wsgi.application'
 
+# CHAT_WS_SERVER_HOST = 'localhost'
+# CHAT_WS_SERVER_PORT = 5002
+# CHAT_WS_SERVER_PROTOCOL = 'ws'
+#
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -135,7 +155,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+USE_TZ = True
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+import datetime
 
 
 class Customer(models.Model):
@@ -67,6 +68,7 @@ class Staff(models.Model):
     def __str__(self):
         return self.staff_name
 
+
 class Order(models.Model):
     pending = 'Pending'
     completed = 'Completed'
@@ -94,9 +96,9 @@ class Order(models.Model):
         (delivery, delivery),
     )
 
-    customer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    order_timestamp = models.CharField(max_length=100, blank=True)
-    delivery_timestamp = models.CharField(max_length=100, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    order_timestamp = models.DateTimeField(auto_now_add=True)
+    delivery_timestamp = models.DateTimeField(auto_now=True)
     payment_status = models.CharField(max_length = 100, choices = STATUS)
     delivery_status = models.CharField(max_length = 100, choices = STATUS)
     if_cancelled = models.BooleanField(default = False)
