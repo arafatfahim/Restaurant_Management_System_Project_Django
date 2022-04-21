@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -39,10 +39,10 @@ def signup(request):
             customer = Customer.objects.create(customer=user, address=address, contact=contact)
             customer.save()
             return redirect('http://localhost:8000/accounts/login/')
-        
+
     else:
         form = SignUpForm()
-        
+
     return render(request, 'registration/signup.html', {'form': form})
 
 
@@ -61,13 +61,13 @@ def dashboard_admin(request):
         sales += order.total_amount
 
     context = {
-        'comments':comments,
-        'orders':orders,
-        'customers':customers,
-        'sales':sales,
+        'comments': comments,
+        'orders': orders,
+        'customers': customers,
+        'sales': sales,
         'top_customers': top_customers,
-        'latest_orders':latest_orders,
-        'datas':datas,
+        'latest_orders': latest_orders,
+        'datas': datas,
     }
     return render(request, 'admin_temp/index.html', context)
 
@@ -77,7 +77,7 @@ def dashboard_admin(request):
 def users_admin(request):
     customers = Customer.objects.filter()
     print(customers)
-    return render(request, 'admin_temp/users.html', {'users':customers})
+    return render(request, 'admin_temp/users.html', {'users': customers})
 
 
 @login_required
@@ -94,14 +94,14 @@ def orders_admin(request):
 @staff_member_required
 def foods_admin(request):
     foods = Food.objects.filter()
-    return render(request, 'admin_temp/foods.html', {'foods':foods})
+    return render(request, 'admin_temp/foods.html', {'foods': foods})
 
 
 @login_required
 @staff_member_required
 def sales_admin(request):
     sales = Data.objects.filter()
-    return render(request, 'admin_temp/sales.html', {'sales':sales})
+    return render(request, 'admin_temp/sales.html', {'sales': sales})
 
 
 def menu(request):
@@ -110,18 +110,18 @@ def menu(request):
     if cuisine is not None:
         if ((cuisine == "Gujarati") or (cuisine == "Punjabi")):
             foods = Food.objects.filter(status="Enabled", course=cuisine)
-        elif(cuisine == "south"):
+        elif (cuisine == "south"):
             foods = Food.objects.filter(status="Enabled", course="South Indian")
-        elif(cuisine == "fast"):
+        elif (cuisine == "fast"):
             foods = Food.objects.filter(course="Fast")
     else:
         foods = Food.objects.filter()
-    return render(request, 'menu.html', {'foods':foods, 'cuisine':cuisine})
+    return render(request, 'menu.html', {'foods': foods, 'cuisine': cuisine})
 
 
 def index(request):
     food = Food.objects.filter().order_by('-num_order')
-    return render(request, 'index.html', {'food':food})
+    return render(request, 'index.html', {'food': food})
 
 
 @login_required
@@ -166,12 +166,12 @@ class StaffAdmin(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(StaffAdmin, self).get_context_data(**kwargs)
-        context['staffs'] = Staff.objects.all() #.order_by('id')[:5]
+        context['staffs'] = Staff.objects.all()  # .order_by('id')[:5]
         return context
 
 
 # @staff_member_required
-class AddStaffView(LoginRequiredMixin,  CreateView):
+class AddStaffView(LoginRequiredMixin, CreateView):
     model = Staff
     fields = ['staff_name', 'address', 'contact', 'salary', 'role']
     template_name = 'admin_temp/add_staff.html'
@@ -193,7 +193,6 @@ class FoodDeleteView(LoginRequiredMixin, DeleteView):
     model = Food
     template_name = 'admin_temp/food_del.html'
     success_url = reverse_lazy('hotel:foods_admin')
-
 
 
 # @login_required
@@ -232,14 +231,16 @@ def add_user(request):
         password = request.POST['password']
         confirm_pass = request.POST['confirm_password']
         username = email.split('@')[0]
-        
-        if (first_name == "") or (last_name == "") or (address == "") or (contact == "") or (email == "") or (password == "") or (confirm_pass == ""):
+
+        if (first_name == "") or (last_name == "") or (address == "") or (contact == "") or (email == "") or (
+                password == "") or (confirm_pass == ""):
             customers = Customer.objects.filter()
             error_msg = "Please enter valid details"
             return render(request, 'admin_temp/users.html', {'users': customers, 'error_msg': error_msg})
 
         if password == confirm_pass:
-            user = User.objects.create(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+            user = User.objects.create(username=username, email=email, password=password, first_name=first_name,
+                                       last_name=last_name)
             user.save()
             cust = Customer.objects.create(customer=user, address=address, contact=contact)
             cust.save()
@@ -265,12 +266,14 @@ def add_food(request):
         fs = FileSystemStorage()
         filename = fs.save(image.name, image)
 
-        if (name == "") or (course is None) or (status is None) or (content == "") or (base_price == "") or (discount == ""):
+        if (name == "") or (course is None) or (status is None) or (content == "") or (base_price == "") or (
+                discount == ""):
             foods = Food.objects.filter()
             error_msg = "Please enter valid details"
             return render(request, 'admin_temp/foods.html', {'foods': foods, 'error_msg': error_msg})
 
-        food = Food.objects.create(name=name, course=course, status=status, content_description=content, base_price=base_price, discount=discount, sale_price=sale_price, image=filename)
+        food = Food.objects.create(name=name, course=course, status=status, content_description=content,
+                                   base_price=base_price, discount=discount, sale_price=sale_price, image=filename)
         food.save()
         foods = Food.objects.filter()
         success_msg = "Please enter valid details"
@@ -284,9 +287,9 @@ class Add_DeliveryBoy(LoginRequiredMixin, TemplateView):
     template_name = 'admin_temp/assign_db.html'
     success_url = reverse_lazy('hotel:staff_admin')
 
+
 class Thanks(LoginRequiredMixin, TemplateView):
     template_name = 'thankyou.html'
-
 
 
 @login_required
@@ -309,7 +312,7 @@ def add_sales(request):
         date = request.POST['date']
         sales = request.POST['sales']
         expenses = request.POST['expenses']
-        
+
         if (date is None) or (sales == "") or (expenses == ""):
             sales = Data.objects.filter()
             error_msg = "Please enter valid details"
@@ -331,10 +334,10 @@ def edit_sales(request, saleID):
     if request.method == "POST":
         if request.POST['sales'] != "":
             data.sales = request.POST['sales']
-        
+
         if request.POST['expenses'] != "":
-            data.expenses = request.POST['expenses'] 
-        
+            data.expenses = request.POST['expenses']
+
         data.save()
     return redirect('hotel:sales_admin')
 
@@ -342,7 +345,7 @@ def edit_sales(request, saleID):
 @login_required
 def food_details(request, foodID):
     food = Food.objects.get(id=foodID)
-    return render(request, 'user/single2.html', {'food':food})
+    return render(request, 'user/single2.html', {'food': food})
 
 
 @login_required
@@ -368,7 +371,7 @@ def cart(request):
     total = 0
     for item in items:
         total += item.food.sale_price
-    return render(request, 'cart.html', {'items': items, 'total':total})
+    return render(request, 'cart.html', {'items': items, 'total': total})
 
 
 @login_required
@@ -379,8 +382,9 @@ def placeOrder(request):
     items = Cart.objects.filter(user=request.user)
     for item in items:
         food = item.food
-        order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending", 
-        delivery_status="Pending", total_amount=food.sale_price, payment_method="Cash On Delivery", location=customer.address)
+        order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
+                                     delivery_status="Pending", total_amount=food.sale_price,
+                                     payment_method="Cash On Delivery", location=customer.address)
         order.save()
         orderContent = OrderContent(food=food, order=order)
         orderContent.save()
@@ -419,7 +423,6 @@ def delivery_boy(request):
             redirect('hotel:index')
         else:
             orders = DeliveryBoy.objects.filter(delivery_boy=staff)
-            return render(request, 'delivery_boy.html', {'orders':orders})
-    
+            return render(request, 'delivery_boy.html', {'orders': orders})
+
     return redirect('hotel:index')
-        

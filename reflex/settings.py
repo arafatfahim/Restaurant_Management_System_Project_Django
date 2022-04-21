@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '^+=_@uh9j!0x%bt@r6x&q)agcqg*3t647=@^2ne-zkrjc&lf-s'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -48,8 +46,6 @@ INSTALLED_APPS = [
     'hotel',
     'mathfilters',
 
-
-
 ]
 # CHANNEL_LAYERS = {
 #       “default”: {
@@ -69,7 +65,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
@@ -92,7 +87,6 @@ TEMPLATES = [
     },
 ]
 
-
 # ASGI_APPLICATION = 'reflex.asgi.application'
 WSGI_APPLICATION = 'reflex.wsgi.application'
 
@@ -110,8 +104,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -139,13 +131,12 @@ INTERNAL_IPS = [
     # ...
 ]
 
-
 if DEBUG:
     import os  # only if you haven't already imported this
     import socket  # only if you haven't already imported this
+
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -164,11 +155,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'pradeepgangwar39@gmail.com'
-EMAIL_HOST_PASSWORD = 'euavmdiktxbocrow'
-EMAIL_PORT = 465
+# EMAIL_USE_SSL = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'pradeepgangwar39@gmail.com'
+# EMAIL_HOST_PASSWORD = 'euavmdiktxbocrow'
+# EMAIL_PORT = 465
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -176,10 +167,10 @@ EMAIL_PORT = 465
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL='/accounts/login'
+LOGIN_URL = '/accounts/login'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = 'login'
+# LOGIN_URL = 'login'
 # LOGIN_REDIRECT_URL = 'hotel:dashboard_admin'
-LOGOUT_REDIRECT_URL = 'hotel:index'
+# LOGOUT_REDIRECT_URL = 'hotel:index'

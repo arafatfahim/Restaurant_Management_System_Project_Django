@@ -15,39 +15,18 @@ class Customer(models.Model):
 
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.TextField()
+    referal_code = models.CharField(max_length=10)
     contact = models.CharField(max_length=10)
     orders = models.IntegerField(default=0)
     total_sale = models.IntegerField(default=0)
-    status = models.CharField(max_length=50 , choices=STATUS)
+    status = models.CharField(max_length=50, choices=STATUS)
 
     def __str__(self):
         return self.customer.first_name + " " + self.customer.last_name
 
 
-# class Staff(models.Model):
-#     admin = 'Admin'
-#     deliveryboy = 'Delivery Boy'
-#     chef = 'Chef'
-
-#     ROLES = (
-#         (admin, admin),
-#         (chef, chef),
-#         (deliveryboy, deliveryboy),
-#     )
-    
-#     staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
-#     address = models.TextField()
-#     contact = models.CharField(max_length=10)
-#     email = User.email
-#     salary = models.IntegerField()
-#     role = models.CharField(max_length=30, choices=ROLES)
-    
-#     def __str__(self):
-#         return self.staff_id.first_name + " " + self.staff_id.last_name
-
 
 class Staff(models.Model):
-
     weiter = 'weiter'
     deliveryboy = 'Delivery Boy'
     chef = 'Chef'
@@ -57,14 +36,15 @@ class Staff(models.Model):
         (chef, chef),
         (deliveryboy, deliveryboy),
     )
-    
+
     staff_name = models.CharField(max_length=255)
     address = models.TextField()
     contact = models.CharField(max_length=10)
     email = models.EmailField(max_length=255)
     salary = models.IntegerField()
     role = models.CharField(max_length=30, choices=ROLES)
-    
+
+
     def __str__(self):
         return self.staff_name
 
@@ -99,13 +79,13 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order_timestamp = models.DateTimeField(auto_now_add=True)
     delivery_timestamp = models.DateTimeField(auto_now=True)
-    payment_status = models.CharField(max_length = 100, choices = STATUS)
-    delivery_status = models.CharField(max_length = 100, choices = STATUS)
-    if_cancelled = models.BooleanField(default = False)
+    payment_status = models.CharField(max_length=100, choices=STATUS)
+    delivery_status = models.CharField(max_length=100, choices=STATUS)
+    if_cancelled = models.BooleanField(default=False)
     total_amount = models.IntegerField()
-    payment_method = models.CharField(max_length = 100, choices = PAYMENT)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT)
     location = models.CharField(max_length=200, blank=True, null=True)
-    delivery_boy = models.ForeignKey(Staff,on_delete=models.CASCADE, null=True, blank=True)
+    delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
 
     def confirmOrder(self):
         self.order_timestamp = timezone.localtime().__str__()[:19]
@@ -116,7 +96,7 @@ class Order(models.Model):
         self.delivery_timestamp = timezone.localtime().__str__()[:19]
         self.delivery_status = self.completed
         self.save()
-    
+
     def __str__(self):
         return self.customer.__str__()
 
@@ -127,7 +107,7 @@ class Food(models.Model):
     chinese = 'Chinese'
     indian = 'Indian'
     italian = 'Italian'
-    
+
     COURSE = (
         (bengali, bengali),
         (thai, thai),
@@ -145,22 +125,22 @@ class Food(models.Model):
     )
 
     name = models.CharField(max_length=250)
-    course = models.CharField(max_length = 50, choices = COURSE)
+    course = models.CharField(max_length=50, choices=COURSE)
     status = models.CharField(max_length=50, choices=STATUS)
     content_description = models.TextField()
     ingradients = models.TextField()
     base_price = models.FloatField()
     sale_price = models.FloatField(default=base_price)
     discount = models.DecimalField(default=0, decimal_places=2, max_digits=5)
-    image = models.FileField(blank=True, null =True)
+    image = models.FileField(blank=True, null=True)
     num_order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
-    
-    #def calculateSalePrice(self):
-     #   self.sale_price = (100.0 - self.discount)/100.0 * self.base_price
-    
+
+    # def calculateSalePrice(self):
+    #   self.sale_price = (100.0 - self.discount)/100.0 * self.base_price
+
 
 class Comment(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
