@@ -368,6 +368,22 @@ def delete_item(request, ID):
 def cart(request):
     user = User.objects.get(id=request.user.id)
     items = Cart.objects.filter(user=user)
+    product = request.POST.get('product')
+    remove = request.POST.get('remove')
+    cart = request.session.get('cart')
+    if cart:
+        quantity = cart.get(product)
+        if quantity:
+            if remove :
+                cart[product] = quantity-1
+            else:
+                cart[product] = quantity+1
+        else:
+            cart[product] = 1
+    else:
+        cart = {product: 1}
+    request.session['cart'] =cart
+    print('cart', request.session['cart'])
     total = 0
     for item in items:
         total += item.food.sale_price
@@ -380,10 +396,15 @@ def placeOrder(request):
     customer = Customer.objects.get(customer=request.user)
     print(customer.address)
     items = Cart.objects.filter(user=request.user)
+    total = 0
     for item in items:
         food = item.food
+        total += item.food.sale_price
+        print(total)
+        print(food)
+
         order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
-                                     delivery_status="Pending", total_amount=food.sale_price,
+                                     delivery_status="Pending", total_amount=total,
                                      payment_method="Cash On Delivery", location=customer.address)
         order.save()
         orderContent = OrderContent(food=food, order=order)

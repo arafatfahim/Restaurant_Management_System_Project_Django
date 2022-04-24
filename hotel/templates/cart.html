@@ -20,17 +20,35 @@
 				<div class="bigcart"></div>
 				<h1>Your shopping cart</h1>
 			</div>
+
+
 			
-			<div class="col-md-7 col-sm-12 text-left">
+			<div class="col-md-7 col-sm-12 text-left product_data">
 				<ul>
+
 					<li class="row list-inline columnCaptions">
+
 						<span>QTY</span>
 						<span>ITEM</span>
 						<span>Price</span>
 					</li>
                     {% for item in items %}
 					<li class="row">
-						<span class="quantity">{{item.quantity}}</span>
+
+						<span class="quantity">
+{#                            <form action="/cart/" class="col-2" method="post">#}
+{#                                {% csrf_token %}#}
+{#                                <input hidden type="text" name="product" value="{{ item.id }}">#}
+{#                                <input hidden type="text" name="remove" value="True">#}
+{#                                <input type="submit" value="-" class="btn btn-block btn-secondary">#}
+{#                            </form>#}
+{#                            {{ product | cart_quantity:request.session.cart }}#}
+{#                            <form action="/cart/" class="col-2" method="post">#}
+{#                                {% csrf_token %}#}
+{#                                <input hidden type="text" name="product" value="{{ product.id }}">#}
+{#                                <input type="submit" value="+" class="btn btn-block btn-secondary">#}
+{#                            </form>#}
+                        </span>
 						<span class="itemName">{{item.food.name}}</span>
                         <span class="popbtn"><a class="arrow" id="{{item.id}}"></a></span>
                         <span class="price">BDT {{ item.food.sale_price|mul:item.quantity }}</span>
@@ -43,7 +61,7 @@
 						<span class="order"> <a class="text-center" href="{% url 'hotel:menu' %}">Continue Shopping</a></span>
 					</li>
 				</ul>
-			</div>
+		 	</div>
 
 		</div>
 
@@ -56,9 +74,11 @@
 		
 		<!-- JavaScript includes -->
 
-		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> 
+		<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+		<script src="{% static 'js/custom.js' %}"></script>
 		<script src="{% static 'js/bootstrap.js' %}"></script>
 		<script src="{% static 'assets/js/customjs.js' %}"></script>
 
 	</body>
+
 </html>

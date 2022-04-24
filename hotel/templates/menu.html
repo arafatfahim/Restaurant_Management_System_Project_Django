@@ -4,12 +4,45 @@
 
 <body>
 	<script src="{% static 'js/jquery.vide.min.js' %}"></script>
-	<div data-vide-bg="{% static 'video/bg.jpg' %}">
-		<!-- banner -->
-		{% include "includes/banner.html" %}
-		<!-- //banner -->
-	</div>
+{#	<div data-vide-bg="{% static 'video/bg.jpg' %}">#}
+{#		<!-- banner -->#}
+{#		{% include "includes/banner.html" %}#}
+{#		<!-- //banner -->#}
+{#	</div>#}
 	<!-- menu -->
+    <div class="banner">
+			<div class="container">
+				<div class="header">
+					<div class="logo">
+						<h1><a href="/">Green View Restaurant</a></h1>
+					</div>
+					<div class="top-nav">
+						<nav class="navbar navbar-default">
+								<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">Menu
+								</button>
+							<!-- Collect the nav links, forms, and other content for toggling -->
+							<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+								<ul class="nav navbar-nav">
+									<li><a href="{% url 'hotel:index' %}">Home</a></li>
+									<li><a href="{% url 'hotel:menu' %}" >Menu</a></li>
+									{% if request.user.is_superuser %}
+									<li><a href="{% url 'hotel:dashboard_admin' %}" >Dashboard</a></li>
+									<li><a href="{% url 'logout' %}" >Logout</a></li>
+									{% elif user.is_authenticated %}
+									<li><a href="{% url 'hotel:my_orders' %}" >My Orders</a></li>
+                                    <li><a href="{% url 'hotel:cart' %}" >My Cart</a></li>
+									<li><a href="{% url 'logout' %}" >Logout</a></li>
+									{% else %}
+									<li><a href="{% url 'login' %}">Login</a></li>
+									<li><a href="{% url 'signup' %}" >Register</a></li>
+									{% endif %}
+									<div class="clearfix"> </div>
+								</ul>
+							</div>
+						</nav>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
 	<div class="menu">
 		<div class="container">
 			<div class="menu-heading">

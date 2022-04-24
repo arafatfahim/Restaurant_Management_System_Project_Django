@@ -55,6 +55,7 @@
                                         <th>Customer's Name</th>
                                         <th>Order Status</th>
                                         <th>Order Time</th>
+                                        <th>Food Item</th>
                                         <th>Amount</th>
                                         <th>Payment Method</th>
                                         <th>Payment Status</th>
@@ -77,6 +78,7 @@
                                             <span class="label label-info">{{order.order_timestamp|naturaltime}}</span>
                                             <span class="label label-primary">{{order.order_timestamp}}</span>
                                         </td>
+                                        <td><span class="label label-default">{{order.food_items}} bdt</span></td>
                                         <td><span class="label label-default">{{order.total_amount}} bdt</span></td>
 
                                         <td><span class="label label-primary">{{order.payment_method}}</span></td>

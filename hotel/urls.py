@@ -5,6 +5,7 @@ from .views import FoodDeleteView, FoodUpdateView, StaffAdmin, AddStaffView, Add
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^cart/$', views.cart, name='cart'),
+    # path('cart', views.cart, name=cart)
     url(r'^menu/$', views.menu, name='menu'),
     url(r'^thanks/$', Thanks.as_view(), name='thanks'),
     url(r'^myorders/$', views.my_orders, name='my_orders'),

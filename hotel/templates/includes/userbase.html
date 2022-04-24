@@ -48,10 +48,10 @@
                         <a href="#">
                             <i class="fa fa-user fa-fw"></i> {{request.user.username}}</a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
+{#                    <li>#}
+{#                        <a href="#">#}
+{#                            <i class="fa fa-gear fa-fw"></i> Settings</a>#}
+{#                    </li>#}
                     <li class="divider"></li>
                     <li>
                         <a href="/accounts/logout/">
@@ -80,6 +80,14 @@
 {#                        <a href="{% url 'hotel:dashboard_admin' %}">#}
 {#                            <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>#}
 {#                    </li>#}
+                    <li>
+                        <a href="{% url 'hotel:index' %}">
+                            <i class="fa fa-home fa-fw"></i>Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'hotel:menu' %}">
+                            <i class="fa fa-hashtag fa-fw"></i>Menu</a>
+                    </li>
                     <li>
                         <a href="{% url 'hotel:my_orders' %}">
                             <i class="fa fa-user fa-fw"></i> My Orders</a>
