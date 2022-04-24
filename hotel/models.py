@@ -72,7 +72,7 @@ class Food(models.Model):
 
     name = models.CharField(max_length=250)
     course = models.CharField(max_length=50, choices=COURSE)
-    status = models.CharField(max_length=50, choices=STATUS)
+    # status = models.CharField(max_length=50, choices=STATUS)
     content_description = models.TextField()
     ingradients = models.TextField()
     base_price = models.FloatField()
@@ -118,11 +118,12 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     order_timestamp = models.DateTimeField(auto_now_add=True)
     delivery_timestamp = models.DateTimeField(auto_now=True)
-    food_items = models.CharField(max_length=255, blank=True, null=True)
+    # food_items = models.ForeignKey(Food, on_delete=models.CASCADE)
+    food_items = models.TextField(null=True)
     payment_status = models.CharField(max_length=100, choices=STATUS)
     delivery_status = models.CharField(max_length=100, choices=STATUS)
     if_cancelled = models.BooleanField(default=False)
-    total_amount = models.IntegerField()
+    total_amount = models.IntegerField(blank=True, null=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT)
     location = models.CharField(max_length=200, blank=True, null=True)
     delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
@@ -161,11 +162,21 @@ class OrderContent(models.Model):
 class Cart(models.Model):
     quantity = models.IntegerField(default=1)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    # price = models.ForeignKey(Food, on_delete=models.CASCADE, related_name='FoodPrice')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.food.__str__()
 
 
 class DeliveryBoy(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE)
+
+
+class UserOrder(models.Model):
+    Customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    food_items = models.ForeignKey(Order, on_delete=models.CASCADE)
+    total_price = models.IntegerField()
 
 

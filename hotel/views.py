@@ -15,7 +15,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.utils import timezone
 from reportlab.pdfgen import canvas
-from .models import Customer, Comment, Order, Food, Data, Cart, OrderContent, Staff, DeliveryBoy
+from .models import Customer, Comment, Order, Food, Data, Cart, OrderContent, Staff, DeliveryBoy, UserOrder
 from .forms import SignUpForm
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
 from django.urls import reverse_lazy, reverse
@@ -108,11 +108,11 @@ def menu(request):
     cuisine = request.GET.get('cuisine')
     print(cuisine)
     if cuisine is not None:
-        if ((cuisine == "Gujarati") or (cuisine == "Punjabi")):
+        if (cuisine == "Gujarati") or (cuisine == "Punjabi"):
             foods = Food.objects.filter(status="Enabled", course=cuisine)
-        elif (cuisine == "south"):
+        elif cuisine == "south":
             foods = Food.objects.filter(status="Enabled", course="South Indian")
-        elif (cuisine == "fast"):
+        elif cuisine == "fast":
             foods = Food.objects.filter(course="Fast")
     else:
         foods = Food.objects.filter()
@@ -181,7 +181,7 @@ class AddStaffView(LoginRequiredMixin, CreateView):
 # @staff_member_required
 class FoodUpdateView(LoginRequiredMixin, UpdateView):
     model = Food
-    fields = ['name', 'course', 'status', 'content_description', 'ingradients',
+    fields = ['name', 'course', 'content_description', 'ingradients',
               'base_price', 'sale_price', 'discount', 'image'
               ]
     template_name = 'admin_temp/update_food.html'
@@ -193,6 +193,12 @@ class FoodDeleteView(LoginRequiredMixin, DeleteView):
     model = Food
     template_name = 'admin_temp/food_del.html'
     success_url = reverse_lazy('hotel:foods_admin')
+
+
+class StaffDeleteView(LoginRequiredMixin, DeleteView):
+    model = Staff
+    template_name = 'admin_temp/staff_del.html'
+    success_url = reverse_lazy('hotel:staff_admin')
 
 
 # @login_required
@@ -257,7 +263,7 @@ def add_food(request):
     if request.method == "POST":
         name = request.POST['name']
         course = request.POST['course']
-        status = request.POST['status']
+        ingradients = request.POST['ingradients']
         content = request.POST['content']
         base_price = request.POST['base_price']
         discount = request.POST['discount']
@@ -266,13 +272,13 @@ def add_food(request):
         fs = FileSystemStorage()
         filename = fs.save(image.name, image)
 
-        if (name == "") or (course is None) or (status is None) or (content == "") or (base_price == "") or (
+        if (name == "") or (course is None) or (content == "") or (ingradients == "") or (base_price == "") or (
                 discount == ""):
             foods = Food.objects.filter()
             error_msg = "Please enter valid details"
             return render(request, 'admin_temp/foods.html', {'foods': foods, 'error_msg': error_msg})
 
-        food = Food.objects.create(name=name, course=course, status=status, content_description=content,
+        food = Food.objects.create(name=name, course=course, content_description=content, ingradients=ingradients,
                                    base_price=base_price, discount=discount, sale_price=sale_price, image=filename)
         food.save()
         foods = Food.objects.filter()
@@ -371,19 +377,6 @@ def cart(request):
     product = request.POST.get('product')
     remove = request.POST.get('remove')
     cart = request.session.get('cart')
-    if cart:
-        quantity = cart.get(product)
-        if quantity:
-            if remove :
-                cart[product] = quantity-1
-            else:
-                cart[product] = quantity+1
-        else:
-            cart[product] = 1
-    else:
-        cart = {product: 1}
-    request.session['cart'] =cart
-    print('cart', request.session['cart'])
     total = 0
     for item in items:
         total += item.food.sale_price
@@ -396,20 +389,25 @@ def placeOrder(request):
     customer = Customer.objects.get(customer=request.user)
     print(customer.address)
     items = Cart.objects.filter(user=request.user)
+    # food = items.food
+    # print(items)
     total = 0
+    store_all = []
     for item in items:
         food = item.food
         total += item.food.sale_price
-        print(total)
-        print(food)
-
-        order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
-                                     delivery_status="Pending", total_amount=total,
-                                     payment_method="Cash On Delivery", location=customer.address)
-        order.save()
-        orderContent = OrderContent(food=food, order=order)
-        orderContent.save()
-        item.delete()
+        store_all.append(food)
+        data = ", \n".join(map(str, store_all))
+    print(total)
+    print(data)
+    order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
+                                 delivery_status="Pending", food_items=data, total_amount=total,
+                                 payment_method="Cash On Delivery", location=customer.address)
+    order.save()
+    # orderContent = OrderContent(food=items.food, order=order)
+    # orderContent.save()
+    # user_order = UserOrder(customer=customer, food_items=str(items), total_price=items.sale_price)
+    items.delete()
     # mail_subject = 'Order Placed successfully'
     # to = str(customer.customer.email)
     # to_email.append(to)
@@ -422,6 +420,13 @@ def placeOrder(request):
     #     to_email,
     # )
     return redirect('hotel:thanks')
+
+
+@login_required
+def latest_order(request):
+    user = User.objects.get(id=request.user.id)
+    customer = Customer.objects.get(customer=user)
+    order = Order.objects.filter(customer=customer).order_by('-id')
 
 
 @login_required

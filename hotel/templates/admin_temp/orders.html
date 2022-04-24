@@ -27,7 +27,7 @@
                                         <th>Customer's Name</th>
                                         <th>Order Status</th>
                                         <th>Order Time</th>
-                                        <th>Food Item</th>
+                                        <th>Ordered Food Item</th>
                                         <th>Amount</th>
                                         <th>Payment Method</th>
                                         <th>Payment Status</th>
@@ -58,7 +58,7 @@
                                         <td>{% if order.payment_status == 'Completed' %}
                                             <span class="label label-success">
                                                 <i class="fa fa-check-circle" aria-hidden="true"></i>
-                                                Paid</span>
+                                                Delivered</span>
                                             {% else %}
                                             <span class="label label-danger">
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>

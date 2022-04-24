@@ -34,6 +34,7 @@
 {#                                        <th>Email</th>#}
                                         <th>Salary</th>
                                         <th>Role</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -45,6 +46,9 @@
 {#                                        <td>{{staff.user.email}}</td>#}
                                         <td>{{staff.salary}}</td>
                                         <td>{{staff.role}}</td>
+                                         <td>
+                                            <a href="{% url 'hotel:staff_delete' staff.id %}" class="btn btn-primary"><span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"></span></a>
+                                        </td>
                                     </tr>
                                     {%  endfor %}
                                 </tbody>

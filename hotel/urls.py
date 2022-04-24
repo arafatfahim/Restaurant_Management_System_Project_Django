@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from . import views
 from django.urls import path
-from .views import FoodDeleteView, FoodUpdateView, StaffAdmin, AddStaffView, Add_DeliveryBoy, Thanks
+from .views import FoodDeleteView, StaffDeleteView, FoodUpdateView, StaffAdmin, AddStaffView, Add_DeliveryBoy, Thanks
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^cart/$', views.cart, name='cart'),
@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^dashboard/delivery_boy/$', views.delivery_boy, name='delivery_boy'),
     path('dashboard/admin/foods/<int:pk>/update', FoodUpdateView.as_view(), name="edit_food"),
     path('dashboard/admin/foods/<int:pk>/delete', FoodDeleteView.as_view(), name="food_delete"),
+    path('dashboard/admin/staff/<int:pk>/delete', StaffDeleteView.as_view(), name="staff_delete"),
 
 ]
