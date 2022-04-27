@@ -120,6 +120,7 @@ class Order(models.Model):
     delivery_timestamp = models.DateTimeField(auto_now=True)
     # food_items = models.ForeignKey(Food, on_delete=models.CASCADE)
     food_items = models.TextField(null=True)
+    food_price = models.TextField(null=True)
     payment_status = models.CharField(max_length=100, choices=STATUS)
     delivery_status = models.CharField(max_length=100, choices=STATUS)
     if_cancelled = models.BooleanField(default=False)

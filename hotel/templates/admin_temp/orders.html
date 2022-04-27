@@ -29,6 +29,7 @@
                                         <th>Order Time</th>
                                         <th>Ordered Food Item</th>
                                         <th>Amount</th>
+                                        <th>Invoice</th>
                                         <th>Payment Method</th>
                                         <th>Payment Status</th>
                                         <th>Delivery Status</th>
@@ -55,6 +56,7 @@
                                         </td>
                                         <td><span class="label label-default">{{order.food_items}}</span></td>
                                         <td><span class="label label-default">{{order.total_amount}} bdt</span></td>
+                                        <td><a href="{% url 'hotel:pdf' order.pk %}" class="btn btn-primary"> Invoice</a></td>
                                         <td><span class="label label-primary">{{order.payment_method}}</span></td>
                                         <td>{% if order.payment_status == 'Completed' %}
                                             <span class="label label-success">

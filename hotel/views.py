@@ -20,6 +20,12 @@ from .forms import SignUpForm
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, TemplateView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def signup(request):
@@ -393,15 +399,30 @@ def placeOrder(request):
     # print(items)
     total = 0
     store_all = []
+    price_all = []
     for item in items:
         food = item.food
+        price = item.food.sale_price
         total += item.food.sale_price
         store_all.append(food)
         data = ", \n".join(map(str, store_all))
+        price_all.append(price)
+        price_data = " \n".join(map(str, price_all))
+
+    print(price_data)
     print(total)
     print(data)
+    # i = 0
+    # price = []
+    # for i in items:
+    #     food = item.food.sale_price
+    #     # f = item.food.sale_price
+    #     price.append(food)
+    #     f = " \n".join(map(str, price))
+    # print(f)
+
     order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
-                                 delivery_status="Pending", food_items=data, total_amount=total,
+                                 delivery_status="Pending", food_items=data, food_price=price_data,  total_amount=total,
                                  payment_method="Cash On Delivery", location=customer.address)
     order.save()
     # orderContent = OrderContent(food=items.food, order=order)
@@ -452,3 +473,55 @@ def delivery_boy(request):
             return render(request, 'delivery_boy.html', {'orders': orders})
 
     return redirect('hotel:index')
+
+
+class OrderListView(ListView):
+    model = Order
+    template_name = 'orders.html'
+
+
+def customer_render_pdf_view(request, *args, **kwargs):
+    pk = kwargs.get('pk')
+    order = get_object_or_404(Order, pk=pk)
+    template_path = 'pdf1.html'
+    context = {'order': order}
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+
+    # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    response['Content-Disposition'] = 'filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response, )
+    # if error then show some funny view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def render_pdf_view(request):
+    pass
+
+    # template_path = 'pdf1.html'
+    # context = {'myvar': 'this is your template context'}
+    # # Create a Django response object, and specify content_type as pdf
+    # response = HttpResponse(content_type='application/pdf')
+    #
+    # # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # response['Content-Disposition'] = 'filename="report.pdf"'
+    # # find the template and render it.
+    # template = get_template(template_path)
+    # html = template.render(context)
+    #
+    # # create a pdf
+    # pisa_status = pisa.CreatePDF(
+    #     html, dest=response, )
+    # # if error then show some funny view
+    # if pisa_status.err:
+    #     return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    # return response
