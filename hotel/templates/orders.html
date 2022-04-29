@@ -61,6 +61,7 @@
                                         <th>Payment Status</th>
                                         <th>Delivery Person</th>
                                         <th>Delivery Status</th>
+                                        <th>Invoice</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,9 +76,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
-{#                                            <span class="label label-info">{{order.order_timestamp|naturalday}}</span>#}
+                                            <span class="label label-info">{{order.order_timestamp|naturalday}}</span>
                                             <span class="label label-info">{{order.order_timestamp|naturaltime}}</span>
-{#                                            <span class="label label-primary">{{order.order_timestamp}}</span>#}
+                                            <span class="label label-primary">{{order.order_timestamp}}</span>
                                         </td>
                                         <td><span class="label label-default">{{order.food_items}}</span></td>
                                         <td><span class="label label-default">{{order.total_amount}} bdt</span></td>
@@ -118,6 +119,8 @@
                                             </span>
                                             {% endif %}
                                         </td>
+{#                                        <td><span class="label label-primary"><a href="{% url 'hotel:pdf' order.pk %}">download</a></span></td>#}
+                                        <td><a href="{% url 'hotel:pdf' order.pk %}" class="btn btn-primary"> Invoice</a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
