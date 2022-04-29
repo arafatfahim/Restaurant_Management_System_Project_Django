@@ -57,7 +57,8 @@
                     <li class="row totals">
 						<span class="itemName">Total:</span>
 						<span class="price">BDT {{total}}</span>
-						<span class="order"> <a class="text-center" href="{% url 'hotel:placeOrder' %}">ORDER</a></span>
+						{% comment %} <span class="order"> <a class="text-center" href="{% url 'hotel:placeOrder' %}">Check Out</a></span> {% endcomment %}
+						<span class="order"> <a class="text-center" href="{% url 'payment:checkout' %}">Check Out</a></span>
 						<span class="order"> <a class="text-center" href="{% url 'hotel:menu' %}">Continue Shopping</a></span>
 					</li>
 				</ul>

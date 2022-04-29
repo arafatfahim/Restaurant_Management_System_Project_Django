@@ -88,6 +88,16 @@ class Food(models.Model):
     #   self.sale_price = (100.0 - self.discount)/100.0 * self.base_price
 
 
+class Cart(models.Model):
+    quantity = models.IntegerField(default=1)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    # price = models.ForeignKey(Food, on_delete=models.CASCADE, related_name='FoodPrice')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.food.__str__()
+
+
 class Order(models.Model):
     pending = 'Pending'
     completed = 'Completed'
@@ -97,14 +107,9 @@ class Order(models.Model):
         (completed, completed),
     )
 
-    cod = 'Cash On Delivery'
-    card = 'Card Payment'
-    bkash = 'Bkash Payment'
-
     PAYMENT = (
-        (cod, cod),
-        (card, card),
-        (bkash, bkash),
+        ('Cash On Delivery', 'Cash On Delivery'),
+        ('Online Payment', 'Online Payment'),
     )
 
     pickup = 'PickUp'
@@ -119,12 +124,14 @@ class Order(models.Model):
     order_timestamp = models.DateTimeField(auto_now_add=True)
     delivery_timestamp = models.DateTimeField(auto_now=True)
     # food_items = models.ForeignKey(Food, on_delete=models.CASCADE)
+    order_items = models.ManyToManyField(Cart)
     food_items = models.TextField(null=True)
+    payment_id = models.CharField(max_length=264, blank=True, null=True)
     payment_status = models.CharField(max_length=100, choices=STATUS)
     delivery_status = models.CharField(max_length=100, choices=STATUS)
     if_cancelled = models.BooleanField(default=False)
     total_amount = models.IntegerField(blank=True, null=True)
-    payment_method = models.CharField(max_length=100, choices=PAYMENT)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT, default='Cash On Delivery')
     location = models.CharField(max_length=200, blank=True, null=True)
     delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -157,16 +164,6 @@ class OrderContent(models.Model):
     quantity = models.IntegerField(default=1)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-
-
-class Cart(models.Model):
-    quantity = models.IntegerField(default=1)
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    # price = models.ForeignKey(Food, on_delete=models.CASCADE, related_name='FoodPrice')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.food.__str__()
 
 
 class DeliveryBoy(models.Model):

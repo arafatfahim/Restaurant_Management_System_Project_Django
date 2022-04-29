@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     "crispy_bootstrap5",
     'hotel',
+    'payment',
     'mathfilters',
+
 
 ]
 # CHANNEL_LAYERS = {
@@ -174,3 +176,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # LOGIN_URL = 'login'
 # LOGIN_REDIRECT_URL = 'hotel:dashboard_admin'
 LOGOUT_REDIRECT_URL = 'hotel:index'
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
+
+STORE_ID = 'no626693759ae89'
+STORE_PASS = 'no626693759ae89@ssl'

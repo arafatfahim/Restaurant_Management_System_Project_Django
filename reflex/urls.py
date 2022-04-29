@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^accounts/logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^accounts/signup/$', views.signup, name='signup'),
     url(r'', include(('hotel.urls', 'hotel'), namespace='hotel')),
+    url(r'', include(('payment.urls', 'payment'), namespace='payment')),
     # re_path(r'chat/', include('django_private_chat2.urls', namespace='django_private_chat2')),
     # url(r'^chat2/', include('django_private_chat.urls')),
 ]
