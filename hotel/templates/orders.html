@@ -83,7 +83,13 @@
                                         <td><span class="label label-default">{{order.food_items}}</span></td>
                                         <td><span class="label label-default">{{order.total_amount}} bdt</span></td>
 
-                                        <td><span class="label label-primary">{{order.payment_method}}</span></td>
+                                        <td>
+                                            <span class="label label-primary">{{order.payment_method}}</span>
+                                            <br>
+                                            {% if order.payment_method == 'Online Payment' %}
+                                            <span class="label label-primary">{{order.payment_type}}</span>
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             {% if order.payment_method == 'Online Payment' or order.payment_status == 'Completed' %}
                                                     <span class="label label-success">
