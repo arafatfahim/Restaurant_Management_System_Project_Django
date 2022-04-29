@@ -82,7 +82,7 @@ def dashboard_admin(request):
 @staff_member_required
 def users_admin(request):
     customers = Customer.objects.filter()
-    print(customers)
+    # print(customers)
     return render(request, 'admin_temp/users.html', {'users': customers})
 
 
@@ -91,8 +91,8 @@ def users_admin(request):
 def orders_admin(request):
     orders = Order.objects.filter().order_by('-id')
     dBoys = Staff.objects.filter(role='Delivery Boy')
-    print(dBoys)
-    print(orders)
+    # print(dBoys)
+    # print(orders)
     return render(request, 'admin_temp/orders.html', {'orders': orders, 'dBoys': dBoys})
 
 
@@ -112,7 +112,7 @@ def sales_admin(request):
 
 def menu(request):
     cuisine = request.GET.get('cuisine')
-    print(cuisine)
+    # print(cuisine)
     if cuisine is not None:
         if (cuisine == "Gujarati") or (cuisine == "Punjabi"):
             foods = Food.objects.filter(status="Enabled", course=cuisine)
@@ -309,7 +309,7 @@ class Thanks(LoginRequiredMixin, TemplateView):
 def add_deliveryBoy(request, orderID):
     order = Order.objects.get(id=orderID)
     dName = request.POST['deliveryBoy']
-    print(dName)
+    # print(dName)
     # user = User.objects.get(first_name=dName)
     deliveryBoy = Staff.objects.get(staff_name=dName)
     order.delivery_boy = deliveryBoy
@@ -393,7 +393,7 @@ def cart(request):
 def placeOrder(request):
     to_email = []
     customer = Customer.objects.get(customer=request.user)
-    print(customer.address)
+    # print(customer.address)
     items = Cart.objects.filter(user=request.user)
     # food = items.food
     # print(items)
@@ -410,8 +410,8 @@ def placeOrder(request):
         price_data = " \n".join(map(str, price_all))
 
     print(price_data)
-    print(total)
-    print(data)
+    # print(total)
+    # print(data)
     # i = 0
     # price = []
     # for i in items:
@@ -455,7 +455,7 @@ def my_orders(request):
     user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(customer=user)
     orders = Order.objects.filter(customer=customer).order_by('-id')
-    print(orders)
+    # print(orders)
     return render(request, 'orders.html', {'orders': orders})
 
 

@@ -126,6 +126,7 @@ class Order(models.Model):
     # food_items = models.ForeignKey(Food, on_delete=models.CASCADE)
     order_items = models.ManyToManyField(Cart)
     food_items = models.TextField(null=True)
+    food_price = models.TextField(null=True)
     payment_id = models.CharField(max_length=264, blank=True, null=True)
     payment_status = models.CharField(max_length=100, choices=STATUS)
     delivery_status = models.CharField(max_length=100, choices=STATUS)

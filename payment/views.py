@@ -58,19 +58,21 @@ class CheckoutTemplateView(TemplateView, LoginRequiredMixin):
 
             if payment_method == 'Cash On Delivery':
                 total = 0
-                data = []
                 store_all = []
-                payment_id = 'Cash On Delivery'
+                price_all = []
                 for item in items:
                     food = item.food
+                    price = item.food.sale_price
                     total += item.food.sale_price
                     store_all.append(food)
                     data = ", \n".join(map(str, store_all))
+                    price_all.append(price)
+                    price_data = " \n".join(map(str, price_all))
                 print(total)
-                # print(data)
-                order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_id=payment_id, payment_status="Pending",
-                                            delivery_status="Pending", food_items=data, total_amount=total,
-                                            payment_method="Cash On Delivery", location=customer.address)
+                print(price_data)
+                order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
+                                 delivery_status="Pending", payment_id='Cash On Delivery', food_items=data, food_price=price_data,  total_amount=total,
+                                 payment_method="Cash On Delivery", location=customer.address)
                 order.save()
                 items.delete()      
                 return redirect('hotel:thanks')
@@ -121,9 +123,9 @@ class CheckoutTemplateView(TemplateView, LoginRequiredMixin):
 def sslc_status(request):
     if request.method == 'post' or request.method == 'POST':
         payment_data = request.POST
-        print('==================')
-        print('==================')
-        print(payment_data)
+        # print('==================')
+        # print('==================')
+        # print(payment_data)
         status = payment_data['status']
         if status == 'VALID':
             val_id = payment_data['val_id']
@@ -142,17 +144,20 @@ def sslc_complete(request, val_id, tran_id):
     data = []
     store_all = []
     payment_id = tran_id
+    price_all = []
     for item in items:
         food = item.food
+        price = item.food.sale_price
         total += item.food.sale_price
         store_all.append(food)
         data = ", \n".join(map(str, store_all))
-    # print(total)
-
-    # print(data)
-    order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_id=payment_id, payment_status="Pending",
-                                delivery_status="Pending", food_items=data, total_amount=total,
-                                payment_method="Online Payment", location=customer.address)
+        price_all.append(price)
+        price_data = " \n".join(map(str, price_all))
+    print(total)
+    print(price_data)
+    order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
+                        delivery_status="Pending", payment_id=payment_id, food_items=data, food_price=price_data,  total_amount=total,
+                        payment_method="Cash On Delivery", location=customer.address)
     order.save()
     items.delete()      
     return redirect('hotel:thanks')
