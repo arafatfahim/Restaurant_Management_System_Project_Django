@@ -408,19 +408,7 @@ def placeOrder(request):
         data = ", \n".join(map(str, store_all))
         price_all.append(price)
         price_data = " \n".join(map(str, price_all))
-
     print(price_data)
-    # print(total)
-    # print(data)
-    # i = 0
-    # price = []
-    # for i in items:
-    #     food = item.food.sale_price
-    #     # f = item.food.sale_price
-    #     price.append(food)
-    #     f = " \n".join(map(str, price))
-    # print(f)
-
     order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
                                  delivery_status="Pending", food_items=data, food_price=price_data,  total_amount=total,
                                  payment_method="Cash On Delivery", location=customer.address)
@@ -441,6 +429,38 @@ def placeOrder(request):
     #     to_email,
     # )
     return redirect('hotel:thanks')
+
+
+@login_required
+def cancel_order_admin(request, orderID):
+    order = Order.objects.filter(id=orderID).first()
+    cancelled_reason = request.POST.get('desc')
+    if order:
+        order.if_cancelled = True
+        order.cancelled_reason = cancelled_reason
+        order.save()
+    return redirect('hotel:orders_admin')
+
+    
+def cancel_order_user(request, orderID):
+    order = Order.objects.filter(id=orderID).first()
+    cancelled_reason = request.POST.get('desc')
+    if order:
+        order.if_cancelled = True
+        order.cancelled_reason = cancelled_reason
+        order.save()
+    return redirect('hotel:my_orders')
+
+
+@login_required
+def refund_request(request, orderID):
+    order = Order.objects.filter(id=orderID).first()
+    if order:
+        order.refund_request = True
+        order.save()
+
+    # return render(request, "admin_temp/orders.html")
+    return redirect('hotel:my_orders')
 
 
 @login_required
@@ -504,24 +524,5 @@ def customer_render_pdf_view(request, *args, **kwargs):
     return response
 
 
-def render_pdf_view(request):
+def render_pdf_view(request, *args, **kwargs):
     pass
-
-    # template_path = 'pdf1.html'
-    # context = {'myvar': 'this is your template context'}
-    # # Create a Django response object, and specify content_type as pdf
-    # response = HttpResponse(content_type='application/pdf')
-    #
-    # # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # response['Content-Disposition'] = 'filename="report.pdf"'
-    # # find the template and render it.
-    # template = get_template(template_path)
-    # html = template.render(context)
-    #
-    # # create a pdf
-    # pisa_status = pisa.CreatePDF(
-    #     html, dest=response, )
-    # # if error then show some funny view
-    # if pisa_status.err:
-    #     return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    # return response

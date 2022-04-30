@@ -131,8 +131,11 @@ class Order(models.Model):
     payment_status = models.CharField(max_length=100, choices=STATUS)
     delivery_status = models.CharField(max_length=100, choices=STATUS)
     if_cancelled = models.BooleanField(default=False)
+    cancelled_reason = models.TextField(blank=True, null=True)
+    refund_request = models.BooleanField(default=False)
     total_amount = models.IntegerField(blank=True, null=True)
     payment_method = models.CharField(max_length=100, choices=PAYMENT, default='Cash On Delivery')
+    payment_type = models.TextField(null=True, blank=True)
     location = models.CharField(max_length=200, blank=True, null=True)
     delivery_boy = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True, blank=True)
 

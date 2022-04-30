@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^dashboard/admin/sales/editSale/(?P<saleID>\d+)/$', views.edit_sales, name='edit_sales'),
 
     url(r'^dashboard/admin/orders/confirm_order/(?P<orderID>\d+)/$', views.confirm_order, name='confirm_order'),
+    url(r'^dashboard/admin/orders/cancel_order/(?P<orderID>\d+)/$', views.cancel_order_admin, name='cancel_order_admin'),
+    url(r'^dashboard/admin/orders/cancel_order_user/(?P<orderID>\d+)/$', views.cancel_order_user, name='cancel_order_user'),
+    url(r'^dashboard/admin/orders/refund_request/(?P<orderID>\d+)/$', views.refund_request, name='refund_request'),
     url(r'^dashboard/admin/orders/confirm_delivery/(?P<orderID>\d+)/$', views.confirm_delivery,
         name='confirm_delivery'),
 

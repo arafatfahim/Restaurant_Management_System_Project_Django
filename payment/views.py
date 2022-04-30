@@ -94,7 +94,7 @@ class CheckoutTemplateView(TemplateView, LoginRequiredMixin):
                     total += item.food.sale_price
                     store_all.append(food)
                     data = ", \n".join(map(str, store_all))
-                print(total)
+                # print(total)
                 # print(data)
                 # print(customer)
                 mypayment.set_product_integration(total_amount=Decimal(total), currency='BDT', product_category='food', product_name='data', num_of_item='item.quantity', shipping_method='YES', product_profile='None')
@@ -125,17 +125,18 @@ def sslc_status(request):
         payment_data = request.POST
         # print('==================')
         # print('==================')
-        # print(payment_data)
+        print(payment_data)
         status = payment_data['status']
         if status == 'VALID':
             val_id = payment_data['val_id']
             tran_id = payment_data['tran_id']
-            return HttpResponseRedirect(reverse('payment:sslc_complete', kwargs={'val_id':val_id, 'tran_id':tran_id}))
+            card_issuer = payment_data['card_issuer']
+            return HttpResponseRedirect(reverse('payment:sslc_complete', kwargs={'val_id':val_id, 'tran_id':tran_id, 'card_issuer':card_issuer}))
     return render(request, 'status.html')
 
 
 @login_required
-def sslc_complete(request, val_id, tran_id):
+def sslc_complete(request, val_id, tran_id, card_issuer):
     # return HttpResponse(val_id)
     customer = Customer.objects.get(customer=request.user)
     print(customer.address)
@@ -144,6 +145,8 @@ def sslc_complete(request, val_id, tran_id):
     data = []
     store_all = []
     payment_id = tran_id
+    payment_type = card_issuer
+    print(payment_type)
     price_all = []
     for item in items:
         food = item.food
@@ -153,11 +156,11 @@ def sslc_complete(request, val_id, tran_id):
         data = ", \n".join(map(str, store_all))
         price_all.append(price)
         price_data = " \n".join(map(str, price_all))
-    print(total)
-    print(price_data)
-    order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Pending",
+    # print(total)
+    # print(price_data)
+    order = Order.objects.create(customer=customer, order_timestamp=timezone.now(), payment_status="Completed",
                         delivery_status="Pending", payment_id=payment_id, food_items=data, food_price=price_data,  total_amount=total,
-                        payment_method="Cash On Delivery", location=customer.address)
+                        payment_method="Online Payment", payment_type=payment_type, location=customer.address)
     order.save()
     items.delete()      
     return redirect('hotel:thanks')
