@@ -1,7 +1,6 @@
 from django.shortcuts import render
 import json
 from django.views.generic import TemplateView
-# Create your views here.
 from sslcommerz_python.payment import SSLCSession
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
